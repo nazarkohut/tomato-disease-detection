@@ -1,0 +1,7 @@
+{
+  "name": "TomatoDiseaseDetectionApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
