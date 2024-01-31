@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {WikiPageModule} from "./pages/wiki/wiki.module";
 
 const routes: Routes = [
   {
