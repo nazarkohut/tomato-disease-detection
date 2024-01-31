@@ -11,6 +11,6 @@ export class PredictionResultPage implements OnInit {
   constructor(public photoService: PhotoService) { }
 
   async ngOnInit() {
-    await this.photoService.loadSaved();
+    // TODO: implement logic of model inference
   }
 }
