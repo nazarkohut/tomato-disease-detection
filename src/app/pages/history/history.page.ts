@@ -14,10 +14,5 @@ export class HistoryPage implements OnInit {
   async ngOnInit() {
     await this.photoService.loadSaved();
   }
-
-  reorderItems(event: any) {
-    const draggedItem = this.photoService.photos.splice(event.detail.from, 1)[0];
-    this.photoService.photos.splice(event.detail.to, 0, draggedItem);
-    event.detail.complete();
-  }
+  
 }

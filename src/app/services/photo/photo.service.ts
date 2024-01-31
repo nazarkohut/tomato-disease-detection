@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Camera, CameraResultType, CameraSource, Photo} from '@capacitor/camera';
 
-import {Directory, Filesystem,  Encoding } from '@capacitor/filesystem';
+import {Directory, Filesystem} from '@capacitor/filesystem';
 import {Preferences} from '@capacitor/preferences';
-import {Platform} from '@ionic/angular';
 import {Capacitor} from "@capacitor/core";
 
 export interface UserPhoto {
@@ -104,98 +103,3 @@ export class PhotoService {
   }
 }
 
-
-
-// import {Injectable} from '@angular/core';
-// import {Camera, CameraResultType, CameraSource, Photo} from '@capacitor/camera';
-// import {Directory, Filesystem} from '@capacitor/filesystem';
-// import {Preferences} from '@capacitor/preferences';
-// import {Capacitor} from "@capacitor/core";
-// import {Subject} from 'rxjs';
-//
-// export interface UserPhoto {
-//   filepath: string;
-//   webviewPath?: string;
-// }
-//
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class PhotoService {
-//   public photos: UserPhoto[] = [];
-//   private PHOTO_STORAGE: string = 'photos';
-//   private photosSubject = new Subject<UserPhoto[]>();
-//
-//   photos$ = this.photosSubject.asObservable();
-//
-//   constructor() {
-//   }
-//
-//   private async readAsBase64(photo: Photo) {
-//     const file = await Filesystem.readFile({
-//       path: photo.path!
-//     });
-//     return file.data;
-//   }
-//
-//   private async savePicture(photo: Photo, fileName: string) {
-//     const base64Data = await this.readAsBase64(photo);
-//     const savedFile = await Filesystem.writeFile({
-//       path: fileName,
-//       data: base64Data,
-//       directory: Directory.Documents
-//     });
-//
-//     const updatedPhoto = {
-//       fileName: fileName,
-//       filepath: savedFile.uri,
-//       webviewPath: Capacitor.convertFileSrc(savedFile.uri),// [http + local + file]
-//     };
-//
-//     this.photos.unshift(updatedPhoto);
-//     // this.photosSubject.next([...this.photos]);
-//
-//     await Preferences.set({
-//       key: this.PHOTO_STORAGE,
-//       value: JSON.stringify(this.photos), // [http + local + file]
-//     });
-//
-//     // console.log(Preferences);
-//
-//     return updatedPhoto;
-//   }
-//
-//   getCurrentDateTime(): string  {
-//     const timestamp = Date.now();
-//     const options: Intl.DateTimeFormatOptions = {
-//       year: 'numeric',
-//       month: 'long',
-//       day: 'numeric',
-//       hour: 'numeric',
-//       minute: 'numeric',
-//       second: 'numeric',
-//       hour12: false, // Use 24-hour format
-//     };
-//     return new Date(timestamp).toLocaleString('en-US', options);
-//   }
-//
-//
-//   public async addNewToGallery() {
-//     const capturedPhoto = await Camera.getPhoto({
-//       resultType: CameraResultType.Uri,
-//       source: CameraSource.Camera,
-//       quality: 100
-//     });
-//
-//     return await this.savePicture(capturedPhoto, "Late Blight" + this.getCurrentDateTime() + ".jpeg");;
-//   }
-//
-//   public async loadSaved() {
-//     const { value } = await Preferences.get({ key: this.PHOTO_STORAGE });
-//     console.log(value);
-//     // console.log((value ? JSON.parse(value));
-//     this.photos = (value ? JSON.parse(value) : []) as UserPhoto[];
-//     console.log(this.photos);
-//
-//   }
-// }
