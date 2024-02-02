@@ -4,18 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { WikiPageRoutingModule } from './wiki-routing.module';
+import { DiseaseInfoPageRoutingModule } from './disease-info-routing.module';
 
-import { WikiPage } from './wiki.page';
+import { DiseaseInfoPage } from './disease-info.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    WikiPageRoutingModule,
+    DiseaseInfoPageRoutingModule,
   ],
-  declarations: [WikiPage]
+  declarations: [DiseaseInfoPage]
 })
-export class WikiPageModule {}
-
+export class DiseaseInfoPageModule {}

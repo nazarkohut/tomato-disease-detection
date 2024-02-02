@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { DiseaseInfoPage } from './pages/disease-info/disease-info.page';
 
 const routes: Routes = [
   {
@@ -12,12 +13,16 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'history',
+    redirectTo: 'wiki',
     pathMatch: 'full'
   },
   {
     path: 'prediction-result',
     loadChildren: () => import('./pages/prediction-result/prediction-result.module').then(m => m.PredictionResultPageModule)
+  },
+  {
+    path: 'disease-info/:id',
+    loadChildren: () => import('./pages/disease-info/disease-info.module').then( m => m.DiseaseInfoPageModule)
   },
 ];
 
