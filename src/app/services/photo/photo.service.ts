@@ -77,15 +77,18 @@ export class PhotoService {
     return `${diseaseName}_${year}${month}${day}_${hours}${minutes}${seconds}.jpeg`;
   }
 
-  public async addNewToGallery() {
-    // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
+  public async getPhotoFromCamera(quality: number, width: number, height: number) {
+    return await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
-      quality: 100
+      quality: quality,
+      width: width,
+      height: height
     });
+  }
 
-    const savedImageFile = await this.savePicture(capturedPhoto, "Late_Blight_" + this.generateFileName() + ".jpeg");
+  public async savePhoto(inferencePhoto: Photo){
+    const savedImageFile = await this.savePicture(inferencePhoto, "Late_Blight_" + this.generateFileName() + ".jpeg");
 
     this.photos.unshift(savedImageFile);
 
@@ -93,7 +96,6 @@ export class PhotoService {
       key: this.PHOTO_STORAGE,
       value: JSON.stringify(this.photos),
     });
-    return capturedPhoto;
   }
 
   public async loadSaved() {
