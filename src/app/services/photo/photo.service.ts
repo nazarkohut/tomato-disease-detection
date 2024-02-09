@@ -103,5 +103,50 @@ export class PhotoService {
     const { value } = await Preferences.get({ key: this.PHOTO_STORAGE });
     this.photos = (value ? JSON.parse(value) : []) as UserPhoto[];
   }
+
+
+  async createVisualizedImage(base64Image: string, boundingBoxes: number[][], imageWidth: number, imageHeight: number): Promise<string> {
+    console.log("Init canvas...");
+    const canvas = document.createElement('canvas');
+    canvas.width = imageWidth;
+    canvas.height = imageHeight;
+    console.log("Init context...");
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Could not get canvas context');
+    }
+
+    console.log("Before promise");
+    // Draw the base image
+    const image = new Image();
+    image.src = base64Image;
+    await new Promise<void>(resolve => {
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, imageWidth, imageHeight);
+
+        // Draw bounding boxes and labels
+        ctx.strokeStyle = '#ff0000';
+        ctx.fillStyle = '#ce0000';
+        ctx.lineWidth = 2;
+        ctx.font = '16px Arial';
+        for (const box of boundingBoxes) {
+          const [x1, y1, x2, y2, diseaseName, confidenceLevel] = box;
+          ctx.beginPath();
+          ctx.rect(x1, y1, x2 - x1, y2 - y1);
+          ctx.stroke();
+          // Write disease name and confidence level above the bounding box
+          ctx.fillText(`${diseaseName}: ${confidenceLevel.toFixed(2)}`, x1, y1 - 5);
+        }
+
+        resolve();
+      };
+    });
+    console.log("After promise");
+
+    // Convert canvas to base64 data URL
+    const visualizedBase64 = canvas.toDataURL('image/jpeg');
+    console.log("2 - visualizedBase64: ", visualizedBase64);
+    return visualizedBase64;
+  }
 }
 

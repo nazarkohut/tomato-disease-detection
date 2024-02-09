@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import {ParticularPredictionResultPage} from "./pages/particular-prediction-result/particular-prediction-result.page";
 
 const routes: Routes = [
   {
@@ -18,6 +19,11 @@ const routes: Routes = [
   {
     path: 'prediction-result',
     loadChildren: () => import('./pages/prediction-result/prediction-result.module').then(m => m.PredictionResultPageModule)
+  },
+  {
+    path: 'particular-prediction-result',
+    loadChildren: () => import('./pages/particular-prediction-result/particular-prediction-result.module').then(m => m.ParticularPredictionResultPageModule),
+    // data: { predictionResult: "" }
   },
 ];
 
