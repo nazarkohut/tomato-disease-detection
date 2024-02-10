@@ -10,8 +10,15 @@ import {NavigationExtras, Router} from "@angular/router";
   styleUrls: ['./prediction-result.page.scss'],
 })
 export class PredictionResultPage {
-  goToPage(page_url: string): void {
-    this.route.navigate([page_url]);
+  goToPage(page_url: string, predictionResult: string, titleDiseaseNames: string, predictionTime: string): void {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        imagePath: predictionResult,
+        titleDiseaseNames: titleDiseaseNames,
+        predictionTime: predictionTime,
+      },
+    };
+    this.route.navigate([page_url], navigationExtras);
   }
 
   public actionSheetButtons = [
@@ -74,13 +81,48 @@ export class PredictionResultPage {
         for (let index = 0; index < imageData.data.length; index += 4) {
           red.push(imageData.data[index] / 255.0);
           green.push(imageData.data[index + 1] / 255.0); // TODO: why do we need to normalize, why red, green, blue are in strange structure
-          blue.push(imageData.data[index + 2] / 255.0); // TODO: add text with confidence and detected decease, also file name should be: 2 Healthy, 3 Late Blight and date -?
+          blue.push(imageData.data[index + 2] / 255.0); // TODO: add text with confidence and detected disease, also file name should be: 2 Healthy, 3 Late Blight and date -?
         }
         const input = [...red, ...green, ...blue];
         resolve(input);
       };
     });
   }
+
+  countLabels(predictionResult: any[][]): {[label: string]: number} {
+    const counts: {[label: string]: number} = {};
+
+    // Iterate over each sublist in the big list
+    for (const sublist of predictionResult) {
+      // Extract the label from each sublist
+      const label = sublist[4];
+
+      // If the label exists, increment its count in the counts array
+      if (label !== undefined) {
+        counts[label] = (counts[label] || 0) + 1;
+      }
+    }
+
+    return counts;
+  }
+
+  createCountString(labelCounts: {[label: string]: number}, replaceWhitespaces: boolean = true, countDelimiter: string = '-', spaceDelimiter: string = '_'): string {
+    const countStrings: string[] = [];
+
+    // Iterate over each label and its count
+    for (const [label, count] of Object.entries(labelCounts)) {
+      if (replaceWhitespaces){
+        const cleanedLabel = label.replace(/\s/g, '');
+        countStrings.push(`${count}${countDelimiter}${cleanedLabel}`);
+      } else {
+        countStrings.push(`${count}${countDelimiter}${label}`);
+      }
+    }
+
+    // Join the count strings with underscores
+    return countStrings.join(spaceDelimiter);
+  }
+
   async runInferenceOnCameraPhoto() {
     console.log("Executing: runInferenceOnCameraPhoto");
     const imageHeight = cameraImageConfig["imageHeight"];
@@ -104,12 +146,22 @@ export class PredictionResultPage {
 
     const output = this.YOLOv8Service.process_output(inferencePhoto, imageWidth, imageHeight);
     console.log(output);
+
     // Draw bounding boxes on the image
-    // this.drawBoundingBoxes(imageBase64, output);
     console.log("Going into createVisualizedImage...");
 
     const visualizedBase64 = await this.photoService.createVisualizedImage(imageBase64, output, imageWidth, imageHeight);
-    this.goToPage("particular-prediction-result") // visualizedBase64);
-    // await this.photoService.savePhoto(inferencePhoto);
+
+    const predictedDiseasesCounts = this.countLabels(output);
+    const fileDiseaseNames = this.createCountString(predictedDiseasesCounts);
+    const titleDiseaseNames = this.createCountString(predictedDiseasesCounts, false, " ", " ");
+    const currentTime = this.photoService.getCurrentTime();
+    const humanFormatCurrentTime = this.photoService.formatTime(currentTime, "human_readable");
+    const fileFormatCurrentTime = this.photoService.formatTime(currentTime, "file")
+    console.log("diseaseNames: ", fileDiseaseNames);
+
+    const savedPhotoFile = await this.photoService.savePhoto(visualizedBase64, fileDiseaseNames, fileFormatCurrentTime, humanFormatCurrentTime);
+
+    this.goToPage("particular-prediction-result", savedPhotoFile.webviewPath, titleDiseaseNames, humanFormatCurrentTime);
   }
 }

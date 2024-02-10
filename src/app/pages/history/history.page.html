@@ -5,14 +5,13 @@
         <ion-card>
           <ion-img [src]="photo.webviewPath"></ion-img>
           <ion-card-header>
-<!--            TODO: change below-->
-            <ion-card-title>Late Blight</ion-card-title>
-            <ion-card-subtitle>Prediction made on 1 January of 2023</ion-card-subtitle>
-<!--            TODO: change above-->
+            <ion-card-title class="truncate">{{photo.fileName}}</ion-card-title>
+            <ion-card-subtitle>{{photo.predictionTimeReadable}}</ion-card-subtitle>
           </ion-card-header>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
 

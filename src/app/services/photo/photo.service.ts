@@ -10,12 +10,27 @@ export interface UserPhoto {
   webviewPath?: string;
 }
 
+enum Month {
+  January = 1,
+  February = 2,
+  March = 3,
+  April = 4,
+  May = 5,
+  June = 6,
+  July = 7,
+  August = 8,
+  September = 9,
+  October = 10,
+  November = 11,
+  December = 12
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
 
-  public photos: UserPhoto[] = [];
+  public photos: any[] = []; // TODO: set type
   private PHOTO_STORAGE: string = 'photos';
 
   constructor() {
@@ -28,9 +43,14 @@ export class PhotoService {
     return file.data;
   }
 
-  private async savePicture(photo: Photo, fileName: string) {
+  private async savePicture(photo: Photo | string, fileName: string, predictionTime: string, predictionTimeReadable: string) {
     // Convert photo to base64 format, required by Filesystem API to save
-    const base64Data = await this.readAsBase64(photo);
+    let base64Data;
+    if (typeof photo !== 'string'){
+      base64Data = await this.readAsBase64(photo);
+    } else {
+      base64Data = photo
+    }
 
     // Write the file to the data directory
     const savedFile = await Filesystem.writeFile({
@@ -45,36 +65,41 @@ export class PhotoService {
     return {
       filepath: savedFile.uri,
       webviewPath: Capacitor.convertFileSrc(savedFile.uri),
+      fileName: fileName,
+      predictionTime: predictionTime,
+      predictionTimeReadable: predictionTimeReadable,
     };
   }
 
-  // getCurrentDateTime(): string  { // TODO: move
-  //   const timestamp = Date.now();
-  //   const options: Intl.DateTimeFormatOptions = {
-  //     year: 'numeric',
-  //     month: 'long',
-  //     day: 'numeric',
-  //     hour: 'numeric',
-  //     minute: 'numeric',
-  //     second: 'numeric',
-  //     hour12: false, // Use 24-hour format
-  //   };
-  //   return new Date(timestamp).toLocaleString('en-US', options);
-  // }
+  monthToString(month: number): string {
+    return Month[month];
+  }
 
-  generateFileName(diseaseName: string = 'LateBlight'): string { // TODO: remove default parameter
+  formatTime(time: string[], stringFormat: string = "fileName"): string {
+    const [year, month, day, hours, minutes, seconds] = time;
+    if (stringFormat === "human_readable") {
+      const monthString = this.monthToString(Number(month));
+      return `${day} of ${monthString}, ${year}; ${hours}:${minutes}:${seconds}`
+    }
+    return `${year}_${month}_${day}_${hours}_${minutes}_${seconds}`;
+  }
+
+  getCurrentTime(): string[] {
     const date = new Date();
 
     // Format the date components separately
-    const year = date.getFullYear(); // TODO: consider moving all of this somewhere
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear().toString(); // TODO: consider moving all of this somewhere
+    const monthNumber = (date.getMonth() + 1)
+    const month = monthNumber.toString().padStart(2, '0'); // Months are zero-based
     const day = date.getDate().toString().padStart(2, '0');
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
+    return [year, month, day, hours, minutes, seconds];
+  }
 
-    // Combine components to form the file name
-    return `${diseaseName}_${year}${month}${day}_${hours}${minutes}${seconds}.jpeg`;
+  generateFileName(diseaseNames: string, predictionTime: string): string {
+    return `${diseaseNames}_${predictionTime}`;
   }
 
   public async getPhotoFromCamera(quality: number, width: number, height: number) {
@@ -87,8 +112,8 @@ export class PhotoService {
     });
   }
 
-  public async savePhoto(inferencePhoto: Photo){
-    const savedImageFile = await this.savePicture(inferencePhoto, "Late_Blight_" + this.generateFileName() + ".jpeg");
+  public async savePhoto(inferencePhoto: string | Photo, diseaseNames: string, predictionTime: string, predictionTimeReadable: string){
+    const savedImageFile = await this.savePicture(inferencePhoto, `${this.generateFileName(diseaseNames, predictionTime)}.jpeg`, predictionTime, predictionTimeReadable);
 
     this.photos.unshift(savedImageFile);
 
@@ -96,12 +121,13 @@ export class PhotoService {
       key: this.PHOTO_STORAGE,
       value: JSON.stringify(this.photos),
     });
+    return savedImageFile;
   }
 
   public async loadSaved() {
     // Retrieve cached photo array data
     const { value } = await Preferences.get({ key: this.PHOTO_STORAGE });
-    this.photos = (value ? JSON.parse(value) : []) as UserPhoto[];
+    this.photos = (value ? JSON.parse(value) : []);
   }
 
 

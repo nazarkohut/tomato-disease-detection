@@ -13,6 +13,6 @@ export class HistoryPage implements OnInit {
 
   async ngOnInit() {
     await this.photoService.loadSaved();
+    console.log(this.photoService.photos);
   }
-  
 }
