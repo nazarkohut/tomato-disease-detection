@@ -5,6 +5,8 @@ import {Directory, Filesystem} from '@capacitor/filesystem';
 import {Preferences} from '@capacitor/preferences';
 import {Capacitor} from "@capacitor/core";
 import { Storage } from '@ionic/storage-angular';
+import CordovaSQLiteDriver from "localforage-cordovasqlitedriver";
+import {StorageService} from "../storage/storage.service";
 
 export interface UserPhoto {
   filepath: string;
@@ -33,10 +35,19 @@ export class PhotoService {
 
 
   public photos: any[] = []; // TODO: set type
-  private PHOTO_STORAGE: string = 'photos';
+  private PHOTO_STORAGE: string = 'predicted-diseases-photos';
 
-  constructor(private storage: Storage) {
+  constructor(private storage: StorageService) {
+    this.storage.init()
+    const currentTime = new Date();
+    console.log('Current time:', currentTime);
+    this.storage.outputDriverInfo();
   }
+  //
+  // async init() {
+  //   await this.storage.defineDriver();
+  //   this.storage = await this.storage.create();
+  // }
 
   private async readAsBase64(photo: Photo) {
     const file = await Filesystem.readFile({
@@ -129,17 +140,26 @@ export class PhotoService {
 
     this.photos.unshift(savedImageFile);
 
-    await Preferences.set({
-      key: this.PHOTO_STORAGE,
-      value: JSON.stringify(this.photos),
-    });
+    // await Preferences.set({
+    //   key: this.PHOTO_STORAGE,
+    //   value: JSON.stringify(this.photos),
+    // });
+
+    await this.storage.set(this.PHOTO_STORAGE, JSON.stringify(this.photos));
     return savedImageFile;
   }
 
   public async loadSaved() {
     // Retrieve cached photo array data
-    const { value } = await Preferences.get({ key: this.PHOTO_STORAGE });
-    this.photos = (value ? JSON.parse(value) : []);
+    // const { value } = await Preferences.get({ key: this.PHOTO_STORAGE });
+    // this.photos = (value ? JSON.parse(value) : []);
+    // const { value } = this.storage.get(this.PHOTO_STORAGE);
+    // this.photos = (photoData ? JSON.parse(photoData) : []);
+    // });
+
+    const value = await this.storage.get(this.PHOTO_STORAGE);
+    this.photos = value ? JSON.parse(value) : [];
+    console.dir("this.photos: ", this.photos);
   }
 
 

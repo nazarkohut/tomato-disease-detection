@@ -1,15 +1,17 @@
 <ion-tabs >
   <ion-tab-bar slot="bottom" [translucent]="true">
-    <ion-tab-button tab="wiki" (click)="goToPage('/wiki')">
+    <ion-tab-button tab="wiki">
       <ion-icon name="library" ></ion-icon>
       Wiki
     </ion-tab-button>
-    <ion-tab-button tab="History" (click)="goToPage('/history')">
+    <ion-tab-button tab="history">
+<!--    (click)="goToPage('/history')-->
       <ion-icon name="file-tray-full"></ion-icon>
       History
     </ion-tab-button>
-    <ion-tab-button tab="camera" (click)="goToPage('/prediction-result')" id="open-action-sheet">
-      <ion-icon name="camera"></ion-icon>
+    <ion-tab-button tab="prediction-result">
+<!--                    id="open-action-sheet">-->
+      <ion-icon name="camera" id="open-action-sheet"></ion-icon>
       Take a picture
     </ion-tab-button>
   </ion-tab-bar>

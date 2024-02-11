@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { HistoryPageRoutingModule } from './history-routing.module';
 
 import { HistoryPage } from './history.page';
+import {IonicStorageModule} from "@ionic/storage-angular";
+import CordovaSQLiteDriver from "localforage-cordovasqlitedriver";
+import {Drivers} from "@ionic/storage";
 
 
 @NgModule({
@@ -14,7 +17,10 @@ import { HistoryPage } from './history.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    HistoryPageRoutingModule
+    HistoryPageRoutingModule,
+    IonicStorageModule.forRoot({
+      driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
+    })
   ],
   declarations: [HistoryPage]
 })

@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import {PhotoService} from "../../services/photo/photo.service";
+import { Injectable } from '@angular/core';
 import {cameraImageConfig} from "../../utils/constants";
-import {Yolov8OnnxService} from "../../services/yolov8/yolov8-onnx.service";
 import {NavigationExtras, Router} from "@angular/router";
+import {PhotoService} from "../photo/photo.service";
+import {Yolov8OnnxService} from "../yolov8/yolov8-onnx.service";
 
-@Component({
-  selector: 'app-prediction-result',
-  templateUrl: './prediction-result.page.html',
-  styleUrls: ['./prediction-result.page.scss'],
+@Injectable({
+  providedIn: 'root'
 })
-export class PredictionResultPage {
+export class InferenceService {
   goToPage(page_url: string, predictionResult: string, titleDiseaseNames: string, predictionTime: string): void {
     const navigationExtras: NavigationExtras = {
       state: {
@@ -20,30 +18,6 @@ export class PredictionResultPage {
     };
     this.route.navigate([page_url], navigationExtras);
   }
-
-  public actionSheetButtons = [
-    {
-      text: 'Take a picture',
-      icon: "camera",
-      handler: () => {
-        this.runInferenceOnCameraPhoto("camera");
-      }
-    },
-    {
-      text: 'Upload from file system',
-      icon: "folder-open-outline",
-      handler: () => {
-        this.runInferenceOnCameraPhoto("filesystem");
-      }
-    },
-    {
-      text: 'Cancel',
-      role: 'cancel',
-      handler: () => {
-        this.route.navigate(['history']);
-      }
-    },
-  ];
   constructor(private route: Router, public photoService: PhotoService, public YOLOv8Service: Yolov8OnnxService) { }
 
   // TODO: move these converters into more appropriate folder and file
