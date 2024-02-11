@@ -1,11 +1,5 @@
-import {Component, ViewChild, ElementRef} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {PhotoService} from "../../services/photo/photo.service";
-
-import {Yolov8OnnxService} from "../../services/yolov8/yolov8-onnx.service";
-import {cameraImageConfig} from "../../utils/constants";
-import {PredictionResultPage} from "../../pages/prediction-result/prediction-result.page";
-import {InferenceService} from "../../services/inference/inference.service";
 
 @Component({
   selector: 'app-tab-menu',

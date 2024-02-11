@@ -3,6 +3,7 @@ import {PhotoService} from "../../services/photo/photo.service";
 import {cameraImageConfig} from "../../utils/constants";
 import {Yolov8OnnxService} from "../../services/yolov8/yolov8-onnx.service";
 import {NavigationExtras, Router} from "@angular/router";
+import {LoaderService} from "../../services/loader/loader.service";
 
 @Component({
   selector: 'app-prediction-result',
@@ -44,7 +45,7 @@ export class PredictionResultPage {
       }
     },
   ];
-  constructor(private route: Router, public photoService: PhotoService, public YOLOv8Service: Yolov8OnnxService) { }
+  constructor(private route: Router, public photoService: PhotoService, public YOLOv8Service: Yolov8OnnxService, private loaderService: LoaderService) { }
 
   // TODO: move these converters into more appropriate folder and file
   private async downloadImageAsBase64(url: string): Promise<string> {
@@ -139,38 +140,45 @@ export class PredictionResultPage {
       capturedPhoto =  await this.photoService.getPhotoFromFileSystem(quality, imageWidth, imageHeight);
     }
 
-    console.log(capturedPhoto.base64String);
-    console.log("DataUrl:", capturedPhoto.dataUrl);
-    console.log(capturedPhoto.path);
-    console.log(capturedPhoto.webPath);
-    console.log(capturedPhoto.exif);
+    try {
+      // Show spinner before making the API call or any time-consuming task
+      await this.loaderService.showLoader();
+      console.log(capturedPhoto.base64String);
+      console.log("DataUrl:", capturedPhoto.dataUrl);
+      console.log(capturedPhoto.path);
+      console.log(capturedPhoto.webPath);
+      console.log(capturedPhoto.exif);
 
-    const imageBase64 = await this.downloadImageAsBase64(capturedPhoto.webPath!);
+      const imageBase64 = await this.downloadImageAsBase64(capturedPhoto.webPath!);
 
-    const capturedPhotoNumberArray = await this.convertImgToNumberArray(imageBase64, imageWidth, imageHeight);
-    console.log("capturedPhotoNumberArray:", capturedPhotoNumberArray);
-    // console.log(capturedPhotoNumberArray);
-    const inferencePhoto = await this.YOLOv8Service.run_model(capturedPhotoNumberArray, imageWidth, imageHeight);
-    console.log(inferencePhoto)
+      const capturedPhotoNumberArray = await this.convertImgToNumberArray(imageBase64, imageWidth, imageHeight);
+      console.log("capturedPhotoNumberArray:", capturedPhotoNumberArray);
+      // console.log(capturedPhotoNumberArray);
+      const inferencePhoto = await this.YOLOv8Service.run_model(capturedPhotoNumberArray, imageWidth, imageHeight);
+      console.log(inferencePhoto)
 
-    const output = this.YOLOv8Service.process_output(inferencePhoto, imageWidth, imageHeight);
-    console.log(output);
+      const output = this.YOLOv8Service.process_output(inferencePhoto, imageWidth, imageHeight);
+      console.log(output);
 
-    // Draw bounding boxes on the image
-    console.log("Going into createVisualizedImage...");
+      // Draw bounding boxes on the image
+      console.log("Going into createVisualizedImage...");
 
-    const visualizedBase64 = await this.photoService.createVisualizedImage(imageBase64, output, imageWidth, imageHeight);
+      const visualizedBase64 = await this.photoService.createVisualizedImage(imageBase64, output, imageWidth, imageHeight);
 
-    const predictedDiseasesCounts = this.countLabels(output);
-    const fileDiseaseNames = this.createCountString(predictedDiseasesCounts);
-    const titleDiseaseNames = this.createCountString(predictedDiseasesCounts, false, " ", " ");
-    const currentTime = this.photoService.getCurrentTime();
-    const humanFormatCurrentTime = this.photoService.formatTime(currentTime, "human_readable");
-    const fileFormatCurrentTime = this.photoService.formatTime(currentTime, "file")
-    console.log("diseaseNames: ", fileDiseaseNames);
+      const predictedDiseasesCounts = this.countLabels(output);
+      const fileDiseaseNames = this.createCountString(predictedDiseasesCounts);
+      const titleDiseaseNames = this.createCountString(predictedDiseasesCounts, false, " ", " ");
+      const currentTime = this.photoService.getCurrentTime();
+      const humanFormatCurrentTime = this.photoService.formatTime(currentTime, "human_readable");
+      const fileFormatCurrentTime = this.photoService.formatTime(currentTime, "file")
+      console.log("diseaseNames: ", fileDiseaseNames);
 
-    const savedPhotoFile = await this.photoService.savePhoto(visualizedBase64, fileDiseaseNames, fileFormatCurrentTime, humanFormatCurrentTime);
+      const savedPhotoFile = await this.photoService.savePhoto(visualizedBase64, fileDiseaseNames, fileFormatCurrentTime, humanFormatCurrentTime);
 
-    this.goToPage("particular-prediction-result", savedPhotoFile.webviewPath, titleDiseaseNames, humanFormatCurrentTime);
+      this.goToPage("particular-prediction-result", savedPhotoFile.webviewPath, titleDiseaseNames, humanFormatCurrentTime);
+    } finally {
+        // Hide the spinner regardless of success or failure
+        await this.loaderService.hideLoader();
+    }
   }
 }
