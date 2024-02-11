@@ -4,6 +4,7 @@ import {Camera, CameraResultType, CameraSource, Photo} from '@capacitor/camera';
 import {Directory, Filesystem} from '@capacitor/filesystem';
 import {Preferences} from '@capacitor/preferences';
 import {Capacitor} from "@capacitor/core";
+import { Storage } from '@ionic/storage-angular';
 
 export interface UserPhoto {
   filepath: string;
@@ -30,10 +31,11 @@ enum Month {
 })
 export class PhotoService {
 
+
   public photos: any[] = []; // TODO: set type
   private PHOTO_STORAGE: string = 'photos';
 
-  constructor() {
+  constructor(private storage: Storage) {
   }
 
   private async readAsBase64(photo: Photo) {
@@ -106,6 +108,16 @@ export class PhotoService {
     return await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
+      quality: quality,
+      width: width,
+      height: height
+    });
+  }
+
+  public async getPhotoFromFileSystem(quality: number, width: number, height: number) {
+    return await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos,
       quality: quality,
       width: width,
       height: height

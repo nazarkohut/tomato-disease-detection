@@ -26,12 +26,15 @@ export class PredictionResultPage {
       text: 'Take a picture',
       icon: "camera",
       handler: () => {
-        this.runInferenceOnCameraPhoto();
+        this.runInferenceOnCameraPhoto("camera");
       }
     },
     {
       text: 'Upload from file system',
-      icon: "folder-open-outline"
+      icon: "folder-open-outline",
+      handler: () => {
+        this.runInferenceOnCameraPhoto("filesystem");
+      }
     },
     {
       text: 'Cancel',
@@ -123,13 +126,19 @@ export class PredictionResultPage {
     return countStrings.join(spaceDelimiter);
   }
 
-  async runInferenceOnCameraPhoto() {
+  async runInferenceOnCameraPhoto(getPhotoFrom: string = "camera") {
     console.log("Executing: runInferenceOnCameraPhoto");
     const imageHeight = cameraImageConfig["imageHeight"];
     const imageWidth = cameraImageConfig["imageWidth"];
     const quality = cameraImageConfig["quality"];
 
-    const capturedPhoto = await this.photoService.getPhotoFromCamera(quality, imageWidth, imageHeight);
+    let capturedPhoto;
+    if (getPhotoFrom === "camera"){
+      capturedPhoto = await this.photoService.getPhotoFromCamera(quality, imageWidth, imageHeight);
+    } else {
+      capturedPhoto =  await this.photoService.getPhotoFromFileSystem(quality, imageWidth, imageHeight);
+    }
+
     console.log(capturedPhoto.base64String);
     console.log("DataUrl:", capturedPhoto.dataUrl);
     console.log(capturedPhoto.path);
