@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {ParticularPredictionResultPage} from "./pages/particular-prediction-result/particular-prediction-result.page";
+
 
 const routes: Routes = [
   {
@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'history',
+    redirectTo: 'wiki',
     pathMatch: 'full'
   },
   {
@@ -24,6 +24,10 @@ const routes: Routes = [
     path: 'particular-prediction-result',
     loadChildren: () => import('./pages/particular-prediction-result/particular-prediction-result.module').then(m => m.ParticularPredictionResultPageModule),
     // data: { predictionResult: "" }
+  },
+  {
+    path: 'disease-info/:id',
+    loadChildren: () => import('./pages/disease-info/disease-info.module').then( m => m.DiseaseInfoPageModule)
   },
 ];
 
