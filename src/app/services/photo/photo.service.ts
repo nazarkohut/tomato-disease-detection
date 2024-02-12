@@ -38,11 +38,16 @@ export class PhotoService {
   private PHOTO_STORAGE: string = 'predicted-diseases-photos';
 
   constructor(private storage: StorageService) {
-    this.storage.init()
+  }
+
+
+  method(){
     const currentTime = new Date();
     console.log('Current time:', currentTime);
-    this.storage.outputDriverInfo();
+    this.storage.getDriverName();
+    console.log(this.storage);
   }
+
   //
   // async init() {
   //   await this.storage.defineDriver();
@@ -159,6 +164,9 @@ export class PhotoService {
 
     const value = await this.storage.get(this.PHOTO_STORAGE);
     this.photos = value ? JSON.parse(value) : [];
+    // this.storage.get(this.PHOTO_STORAGE).subscribe((value: any) => {
+    //   this.photos = value ? JSON.parse(value) : [];
+    // });
     console.dir("this.photos: ", this.photos);
   }
 

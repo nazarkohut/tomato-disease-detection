@@ -12,23 +12,10 @@ import {Drivers} from "@ionic/storage";
 export class HistoryPage implements OnInit {
 
   async ngOnInit() {
-    await this.initStorage();
+    this.photoService.method();
+    await this.photoService.loadSaved();
+    console.log(this.photoService.photos);
   }
-
-  async initStorage() {
-    // Define the driver
-    await this.storage.defineDriver(CordovaSQLiteDriver);
-    // await this.storage.defineDriver(Drivers.IndexedDB);
-    // Create the storage instance
-    await this.storage.create();
-    // Log the driver name
-    console.log("HistoryPage", this.storage.driver);
-  }
-
-  // async ngOnInit() {
-  //   await this.photoService.loadSaved();
-  //   console.log(this.photoService.photos);
-  // }
 
   constructor(public photoService: PhotoService, private storage: Storage) {
   }

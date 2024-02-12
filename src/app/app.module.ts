@@ -11,6 +11,7 @@ import {TabMenuComponent} from "./components/tab-menu/tab-menu.component";
 import {HeaderMenuComponent} from "./components/header-menu/header-menu.component";
 import {IonicStorageModule} from '@ionic/storage-angular';
 import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import {StorageService} from "./services/storage/storage.service";
 
 @NgModule({
   declarations: [AppComponent, TabMenuComponent, HeaderMenuComponent],
@@ -22,7 +23,7 @@ import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
       driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
     })
   ],
-  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}],
+  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, StorageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
