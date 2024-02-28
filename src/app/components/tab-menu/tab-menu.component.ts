@@ -9,7 +9,6 @@ import {Router} from '@angular/router';
 export class TabMenuComponent {
   constructor(private route: Router) {
   }
-
   goToPage(page_url: string): void {
     this.route.navigate([page_url]);
   }

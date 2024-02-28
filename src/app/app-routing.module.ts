@@ -21,13 +21,16 @@ const routes: Routes = [
     loadChildren: () => import('./pages/prediction-result/prediction-result.module').then(m => m.PredictionResultPageModule)
   },
   {
-    path: 'particular-prediction-result',
+    path: 'particular-prediction-result/:id',
     loadChildren: () => import('./pages/particular-prediction-result/particular-prediction-result.module').then(m => m.ParticularPredictionResultPageModule),
-    // data: { predictionResult: "" }
   },
   {
     path: 'disease-info/:id',
     loadChildren: () => import('./pages/disease-info/disease-info.module').then( m => m.DiseaseInfoPageModule)
+  },
+  {
+    path: 'history-day/:year/:month/:day',
+    loadChildren: () => import('./pages/history-day/history-day.module').then( m => m.HistoryDayPageModule)
   },
 ];
 

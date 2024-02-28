@@ -1,5 +1,5 @@
-import { Component, OnInit} from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import {LoaderService} from '../../services/loader/loader.service'
 
 @Component({
@@ -8,12 +8,11 @@ import {LoaderService} from '../../services/loader/loader.service'
   styleUrls: ['./wiki.page.scss'],
 
 })
-export class WikiPage implements OnInit {
+export class WikiPage {
 
-  constructor(private router: Router, private loaderService: LoaderService) { }
+  constructor(private router: Router, private loaderService: LoaderService) {
+  }
 
-  ngOnInit() {}
-  
   handleCardClick(id: number) {
     this.router.navigate(['disease-info', id]);
     // Your code to execute when the card is clicked

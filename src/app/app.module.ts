@@ -10,7 +10,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {TabMenuComponent} from "./components/tab-menu/tab-menu.component";
 import {HeaderMenuComponent} from "./components/header-menu/header-menu.component";
 import {IonicStorageModule} from '@ionic/storage-angular';
-import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import {StorageService} from "./services/storage/storage.service";
 
 @NgModule({
@@ -20,7 +19,7 @@ import {StorageService} from "./services/storage/storage.service";
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot({
-      driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
+      driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
     })
   ],
   providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, StorageService],

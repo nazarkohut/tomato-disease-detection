@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Storage } from '@ionic/storage-angular';
-import CordovaSQLiteDriver from "localforage-cordovasqlitedriver";
-import { Drivers } from '@ionic/storage';
-import {BehaviorSubject, filter, switchMap} from "rxjs";
+// import CordovaSQLiteDriver from "localforage-cordovasqlitedriver";
 
 @Injectable()
 export class StorageService {
@@ -14,14 +12,8 @@ export class StorageService {
   }
 
   async init() {
-    await this.storage.defineDriver(CordovaSQLiteDriver);
+    // await this.storage.defineDriver(CordovaSQLiteDriver);
     this._storage = await this.storage.create();
-    // this.storage.ready();
-    // this._storage.ready();
-    console.log("StorageService", this.storage.driver)
-    console.log("StorageService private var", this._storage.driver)
-    const currentTime = new Date();
-    console.log('Current time:', currentTime);
   }
 
   public get(key: string) {

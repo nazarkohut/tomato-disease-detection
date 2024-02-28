@@ -7,7 +7,7 @@ import {onnxExecutionProvider, onnxWasmURL, YOLOConfig} from "../../utils/consta
   providedIn: 'root'
 })
 export class Yolov8OnnxService {
-  public confidence: number = 0.3;
+  public confidence: number = 0.25;
   public yoloClasses: string[] | [] = YOLOConfig.classes;
   private weightsURL = YOLOConfig.weightsURL;
 
@@ -20,30 +20,26 @@ export class Yolov8OnnxService {
    */
   async run_model(input: number[], imageWidth: number, imageHeight: number): Promise<object> {
     ort.env.wasm.wasmPaths = onnxWasmURL;
-    console.log("Session initialization...");
-    console.log("Model loading...");
+    ort.env.wasm.numThreads = 1; // TODO: experiment with this one in future
+    ort.env.wasm.simd = false; // TODO: read about it
+
 
     const model = await ort.InferenceSession.create(this.weightsURL, {executionProviders: [onnxExecutionProvider]});
     console.log("Tensor creation...");
+
     const inputTensor = new ort.Tensor(Float32Array.from(input), [1, 3, imageWidth, imageHeight]);
+
+
     console.log("Forward pass...");
     const outputs = await model.run({images: inputTensor});
     console.log("Access data...");
     return outputs["output0"].data;
   }
 
-  /**
-   * Function used to convert RAW output from YOLOv8 to an array of detected objects.
-   * Each object contains the bounding box of this object, the type of object, and the probability
-   * @param output Raw output of YOLOv8 network
-   * @param imageWidth
-   * @param imageHeight
-   * @returns Array of detected objects in a format [[x1, y1, x2, y2, object_type, probability],..]
-   */
   process_output(output: any, imageWidth: number, imageHeight: number): number[][] {
     let boxes: any[][] = [];
     for (let index = 0; index < 8400; index++) {
-      const [class_id, prob] = [...Array(80).keys()]
+      const [class_id, prob] = [...Array(this.yoloClasses.length).keys()] // Initially array leght was = 80
         .map(col => [col, output[8400 * (col + 4) + index]])
         .reduce((accum, item) => item[1] > accum[1] ? item : accum, [0, 0]);
       if (prob < this.confidence) {
