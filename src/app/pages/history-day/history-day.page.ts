@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PhotoService} from "../../services/photo/photo.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DatabaseService} from "../../services/database/database.service";
 import {DatesService} from "../../services/dates/dates.service";
+import {HeaderService} from "../../services/header/header.service";
 
 @Component({
   selector: 'app-history-day',
@@ -14,13 +15,16 @@ export class HistoryDayPage implements OnInit {
   public month: string = '';
   public day: string = '';
 
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public databaseService: DatabaseService,
     public datesService: DatesService,
     public photoService: PhotoService,
-  ) { }
+    private headerService: HeaderService
+  ) {
+  }
 
   goToPage(page_url: string): void {
     this.router.navigate([page_url]);
@@ -33,10 +37,13 @@ export class HistoryDayPage implements OnInit {
       this.month = params.get('month')!;
       this.day = params.get('day')!;
 
+      this.headerService.setPageTitle(`Predictions for ${this.day}.${this.month}.${this.year}`);
+
       // Now you can use these parameters as needed
       this.photoService.loadPredictionByDay(this.year, this.month, this.day);
 
     });
+
   }
 
 }

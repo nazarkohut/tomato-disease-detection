@@ -10,14 +10,12 @@ export class LoaderService {
 
   constructor(private loadingController: LoadingController) {}
 
-  async showLoader(loadingMessage: string = "Loading...") {
+  async showLoader() {
     this.loader = await this.loadingController.create({
-      message: loadingMessage,
-      // translucent: true,
-      // spinner: null, // Set to null to hide default spinner
-      // translucent: true,
-      // cssClass: 'custom-loader', // Add a custom CSS class for styling
-      // component: CustomSpinnerComponent, // Use your custom spinner component
+      spinner: null,
+      cssClass: 'global-loader',
+      duration:10000000,
+      translucent: true,
     });
     await this.loader.present();
   }

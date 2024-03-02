@@ -1,0 +1,9 @@
+{
+  "disease_name": "Tomato Leaf Mold",
+  "aliases": "",
+  "disease_image_path": "assets/images/wiki/leaf-mold.jpg",
+  "description": "Tomato leaf mold, caused by the pathogen Passalora fulva (syn. Cladosporium fulvum), is a widespread issue globally, particularly prevalent in regions with high relative humidity, notably in plastic greenhouses. Although primarily affecting greenhouse-grown tomatoes, under specific conditions, it can also pose a threat to field-grown crops. The symptoms initially appear as pale green to yellowish spots on the upper leaf surfaces, gradually transitioning into bright yellow patches as the disease progresses. These spots coalesce, leading to foliage death. Infected leaves often curl, wither, and may eventually detach from the plant. While the disease primarily affects leaf tissue, it can also impact flowers, stems, and occasionally fruit. In cases where fruit is infected, tomatoes develop a dark coloration, become leathery, and exhibit rot at the stem end.",
+  "treatment": "P. fulfa, a pathogen, thrives on infected plant remnants and in soil, often originating from contaminated seeds. Spread occurs through rain, wind, tools, clothing, and insects. It prefers conditions of high humidity (>85%) and elevated temperatures. To reduce the risk when growing tomatoes in a greenhouse, maintain higher night temperatures compared to outdoors. Choose certified disease-free or treated seeds for planting. After harvesting, promptly remove and dispose of all crop residue. Thoroughly clean the greenhouse between crop cycles. Utilize fans and avoid overhead watering to minimize leaf moisture. Stake and prune plants to enhance airflow. Promptly apply fungicides at the first sign of infection, following manufacturer instructions.",
+  "type": "Fungal",
+  "other_crops": "tomatoes"
+}

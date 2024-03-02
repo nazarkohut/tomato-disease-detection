@@ -1,0 +1,10 @@
+{
+  "disease_name": "Tomato yellow leaf curl virus",
+  "aliases": "TYLCV",
+  "disease_image_path": "assets/images/wiki/yellow-leaf-curl.jpg",
+  "description": "Tomato Yellow Leaf Curl Virus (TYLCV) is a destructive disease primarily affecting tomatoes, though it can infect over 30 different types of plants. Characterized by small, yellowing leaves that curl upwards, TYLCV causes significant reductions in tomato yields, with losses of up to 100 percent reported. TYLCV is a DNA virus belonging to the genus Begomovirus and the family Geminiviridae, this disease is transmitted by the silverleaf whitefly (Bemisia tabaci), also known as the sweet potato whitefly.",
+  "treatment": "There are no treatments for viruses. Infected cucurbits plants cannot be cured; therefore, the focus should be on prevention.",
+  "prevention": "Preventing and managing Tomato Yellow Leaf Curl Virus (TYLCV) requires a comprehensive approach. Begin by utilizing plant varieties and seeds resistant to the virus whenever possible. When growing outdoors, employ structures with intact nets to deter whiteflies and regularly inspect and maintain them to prevent entry. Remove weeds diligently, as some species can host TYLCV, complicating control efforts.\n\nSuspected infected plants should be carefully removed from the garden and destroyed. Cover symptomatic plants with clear or black plastic bags, tied at the stem at soil level, and cut off below the bag. Allow the bagged plant and whiteflies to desiccate on the soil surface for 1-2 days before disposal in the trash. Do not compost infected plants directly to prevent virus spread.\n\nInspect plants for whitefly infestations at least twice weekly. If whiteflies are detected, spray with azadirachtin, pyrethrin, or insecticidal soap, ensuring thorough coverage of leaf undersides. Rotate between at least two of these insecticides for enhanced control, following label directions closely regarding dosage rates and precautions.",
+  "other_crops": "tomatoes, potatoes, beans, eggplants, tobacco, peppers",
+  "type": "Viral"
+}

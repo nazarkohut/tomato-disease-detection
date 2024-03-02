@@ -11,6 +11,7 @@ import {TabMenuComponent} from "./components/tab-menu/tab-menu.component";
 import {HeaderMenuComponent} from "./components/header-menu/header-menu.component";
 import {IonicStorageModule} from '@ionic/storage-angular';
 import {StorageService} from "./services/storage/storage.service";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [AppComponent, TabMenuComponent, HeaderMenuComponent],
@@ -18,6 +19,7 @@ import {StorageService} from "./services/storage/storage.service";
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    HttpClientModule,
     IonicStorageModule.forRoot({
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
     })

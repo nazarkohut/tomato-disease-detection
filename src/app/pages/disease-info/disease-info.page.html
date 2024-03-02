@@ -1,16 +1,32 @@
 <ion-card>
-    <img alt="Silhouette of mountains" src="https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg" />
-    <div>
-        <ion-card-header>
-            <ion-card-title>Card Title</ion-card-title>
-            <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
-        </ion-card-header>
-  
-        <ion-card-content>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur vero impedit repellat saepe ad! Cum illo alias repellendus error quaerat, consequuntur recusandae officia corrupti. Deserunt harum iure necessitatibus voluptatibus dolorem.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores, recusandae accusamus cupiditate necessitatibus sed eveniet rerum quo magni reiciendis ipsam tempora saepe impedit esse nesciunt a odit in eaque quis.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores, qui ab earum facilis corrupti possimus tempore rerum tempora beatae harum quidem expedita tenetur dignissimos asperiores? Libero dolorem ducimus inventore. Possimus.
-        </ion-card-content>
-    </div>
+  <img src="{{this.pageWikiInfo?.disease_image_path}}" />
+  <div>
+    <ion-card-header>
+      <ion-card-title>{{this.pageWikiInfo?.disease_name}}</ion-card-title>
+      <ion-card-subtitle *ngIf="pageWikiInfo?.aliases">{{ pageWikiInfo?.aliases }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      {{this.pageWikiInfo?.description}}
+
+      <br>
+
+      <b>Treatment:</b>
+      {{this.pageWikiInfo?.treatment}}
+
+
+      <div *ngIf="this.pageWikiInfo && this.pageWikiInfo?.prevention !== undefined">
+        <b>How to prevent:</b>
+        {{this.pageWikiInfo?.prevention}}
+      </div>
+
+
+<!--      <div *ngIf="this.pageWikiInfo && this.pageWikiInfo?.prevention !== undefined">-->
+<!--      TODO: maybe use badge to show these-->
+<!--        <b>Other crops that may be affected by this disease:</b>-->
+<!--        {{this.pageWikiInfo?.other_crops}}-->
+<!--      </div>-->
+    </ion-card-content>
+  </div>
 
 </ion-card>

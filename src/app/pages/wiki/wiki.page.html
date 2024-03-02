@@ -1,31 +1,12 @@
-<div>
-    
-    <ion-card (click)="handleCardClick(1)" class="ion-activatable" style="background-image: url('https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg');">
-        <ion-card-header>
-            <ion-card-title><ion-chip>Disease</ion-chip></ion-card-title>
-        </ion-card-header>
-        <ion-ripple-effect></ion-ripple-effect>
-    </ion-card>     
-
-    <ion-card (click)="handleCardClick(2)" class="ion-activatable" style="background-image: url('https://cdn.mos.cms.futurecdn.net/UQdzFkT7krn4DiaAUdZt9Y.jpg');">
-        <ion-card-header>
-            <ion-card-title><ion-chip>Disease</ion-chip></ion-card-title>
-        </ion-card-header>
-        <ion-ripple-effect></ion-ripple-effect>
-    </ion-card>
-
-    <ion-card (click)="handleCardClick(3)" class="ion-activatable"  style="background-image: url('https://www.gardentech.com/-/media/project/oneweb/gardentech/images/blog/fight-blight-on-your-tomatoes/fight_blight-header.jpg');">
-        <ion-card-header>
-            <ion-card-title><ion-chip>Disease</ion-chip></ion-card-title>
-        </ion-card-header>
-        <ion-ripple-effect></ion-ripple-effect>
-    </ion-card>
-
+<div class="scroll-container">
+  <ion-card *ngFor="let card of this.wikiRecords"  class="ion-activatable" style="background-image: url('{{card.disease_image_path}}');" (click)="handleCardClick(card.disease_name)">
+    <ion-card-header>
+      <ion-card-title><ion-chip>{{card.disease_name}}</ion-chip></ion-card-title>
+    </ion-card-header>
+    <ion-ripple-effect></ion-ripple-effect>
+  </ion-card>
 </div>
 
-<ion-button (click)="this.fetchData()">Click me</ion-button>
 
-
-
-<!-- <ion-spinner></ion-spinner> -->
+<!--<ion-button  (click)="this.fetchData()">Show Loading</ion-button>-->
 

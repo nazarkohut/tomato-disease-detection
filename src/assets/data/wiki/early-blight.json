@@ -1,0 +1,10 @@
+{
+  "disease_name": "Early blight",
+  "aliases": "Alternaria",
+  "disease_image_path": "assets/images/wiki/early-blight.jpg",
+  "description": "Early blight, caused by the Alternaria fungus(Alternaria tomatophila and Alternaria solani), is the most common leaf problem for tomatoes. It manifests as dark brown spots with rings on the leaves. These spots typically appear first on the lower leaves of the plant and can spread upwards, leading to the drying and shedding of leaves. Additionally, the stems and fruits may also develop spots, potentially increasing the risk of sunburn due to reduced leaf coverage. The disease can persist in the soil for up to a year, posing a continued threat to future tomato plants as it may endure through the winter on infected plant matter and spread via splashing rain, irrigation, insects, and gardening equipment. Additionally, it can be transmitted through tomato seeds and potato tubers. Although, early blight tends to emerge after the plants have started producing fruit, it''s important to understand that the disease is not confined to particular stages of growth and can occur at any point during the growing season.",
+  "treatment": "Treat early blight by pruning affected lower leaves, removing up to one-third of infected foliage. Employ a specialized tomato fungicide as soon as symptoms appear or when weather conditions are conducive to disease development.",
+  "prevention": "To mitigate the risk of early blight, it''s advisable to water your plants directly at soil level and apply a layer of mulch. Ensure proper spacing between plants and rows, utilizing stakes for support and diligently managing weed growth. Regularly trim off lower leaves from your plants and implement a rotation strategy, alternating tomato plants and other nightshade crops every two years. These measures collectively contribute to effective disease prevention and overall plant health.",
+  "type": "Fungus",
+  "other_crops": "tomatoes, potatoes, peppers"
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DatabaseService, DatabaseWikiInfo} from "../../services/database/database.service";
 
 @Component({
   selector: 'app-disease-info',
@@ -7,16 +8,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./disease-info.page.scss'],
 })
 export class DiseaseInfoPage implements OnInit {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private databaseService: DatabaseService) { }
+
+  public pageWikiInfo: DatabaseWikiInfo | undefined;
 
 
-  constructor(private activatedRoute: ActivatedRoute) { }
-
-  id: string | undefined;
-
-  ngOnInit() {
-    this.id = this.activatedRoute.snapshot.params['id'];
-    // console.log(this.id);
-    // console.log(typeof(this.id));
+  async ngOnInit() {
+    const diseaseName = this.activatedRoute.snapshot.params['disease-name'];
+    this.pageWikiInfo = (await this.databaseService.findWikiByDiseaseName(diseaseName))!;
   }
 
 }

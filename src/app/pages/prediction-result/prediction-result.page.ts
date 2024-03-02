@@ -8,6 +8,7 @@ import {DatabaseService} from "../../services/database/database.service";
 import {DatesService} from "../../services/dates/dates.service";
 import {ConvertersService} from "../../services/converters/converters.service";
 import {ActionSheetController} from "@ionic/angular";
+import {HeaderService} from "../../services/header/header.service";
 
 
 @Component({
@@ -18,6 +19,7 @@ import {ActionSheetController} from "@ionic/angular";
 export class PredictionResultPage {
   ionViewWillEnter() {
     this.presentActionSheet();
+    this.headerService.setPageTitle('Take a photo');
   }
 
   async presentActionSheet() {
@@ -60,7 +62,8 @@ export class PredictionResultPage {
               public YOLOv8Service: Yolov8OnnxService,
               private loaderService: LoaderService,
               private databaseService: DatabaseService,
-              private actionSheetCtrl: ActionSheetController) {
+              private actionSheetCtrl: ActionSheetController,
+              private headerService: HeaderService) {
   }
 
   goToPage(page_url: string, id: string): void {
