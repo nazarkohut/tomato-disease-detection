@@ -12,9 +12,10 @@ import {HeaderMenuComponent} from "./components/header-menu/header-menu.componen
 import {IonicStorageModule} from '@ionic/storage-angular';
 import {StorageService} from "./services/storage/storage.service";
 import {HttpClientModule} from "@angular/common/http";
+import {HeaderMenuModule} from "./components/header-menu/header-menu.component.module";
 
 @NgModule({
-  declarations: [AppComponent, TabMenuComponent, HeaderMenuComponent],
+  declarations: [AppComponent, TabMenuComponent], //, HeaderMenuComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -22,10 +23,15 @@ import {HttpClientModule} from "@angular/common/http";
     HttpClientModule,
     IonicStorageModule.forRoot({
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
-    })
+    }),
+    HeaderMenuModule
   ],
   providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, StorageService],
   bootstrap: [AppComponent],
+  exports: [
+    // TabMenuComponent,
+    // HeaderMenuComponent
+  ]
 })
 export class AppModule {
 }

@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PhotoService} from "../../services/photo/photo.service";
 import {cameraImageConfig} from "../../utils/constants";
 import {Yolov8OnnxService} from "../../services/yolov8/yolov8-onnx.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {LoaderService} from "../../services/loader/loader.service";
 import {DatabaseService} from "../../services/database/database.service";
 import {DatesService} from "../../services/dates/dates.service";
@@ -16,10 +16,12 @@ import {HeaderService} from "../../services/header/header.service";
   templateUrl: './prediction-result.page.html',
   styleUrls: ['./prediction-result.page.scss'],
 })
-export class PredictionResultPage {
-  ionViewWillEnter() {
-    this.presentActionSheet();
-    this.headerService.setPageTitle('Take a photo');
+export class PredictionResultPage implements OnInit{
+
+  ngOnInit(){
+    this.activatedRoute.data.subscribe((val) => {
+      this.presentActionSheet();
+    })
   }
 
   async presentActionSheet() {
@@ -50,12 +52,13 @@ export class PredictionResultPage {
       text: 'Cancel',
       role: 'cancel',
       handler: () => {
-        this.route.navigate(['history']);
+        this.router.navigate(['history']);
       }
     },
   ];
 
-  constructor(private route: Router,
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
               public datesService: DatesService,
               public convertersService: ConvertersService,
               public photoService: PhotoService,
@@ -67,7 +70,7 @@ export class PredictionResultPage {
   }
 
   goToPage(page_url: string, id: string): void {
-    this.route.navigate([`${page_url}/${id}`]);
+    this.router.navigate([`${page_url}/${id}`]);
   }
 
 

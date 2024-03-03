@@ -1,5 +1,9 @@
 <div>
-  <ion-card *ngFor="let date of photoService.days; index as position" class="history-day-card" (click)="goToPage('/history-day/' + date[0] + '/' + date[1] + '/' + date[2])">
+  <div class="no-history-icon-wrapper" *ngIf="photoService.days.length === 0">
+    <ion-icon src="assets/svg-icons/tomato-man-history.svg" class="no-history-icon"></ion-icon>
+  </div>
+
+  <ion-card *ngFor="let date of photoService.days; index as position" class="history-day-card" (click)="goToPage('history/history-day/' + date[0] + '/' + date[1] + '/' + date[2])">
     <ion-card-header >
       <ion-card-title>{{date[2]}} of {{this.dateService.monthToString(Number(date[1]))}}; {{date[0]}}</ion-card-title>
     </ion-card-header>

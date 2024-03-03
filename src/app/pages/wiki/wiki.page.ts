@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {LoaderService} from '../../services/loader/loader.service'
 import {WikiService} from "../../services/database/wiki/wiki.service";
 import {DatabaseService, DatabaseWikiInfo} from "../../services/database/database.service";
@@ -22,7 +22,7 @@ export class WikiPage {
       }
     );
 
-    this.headerService.setPageTitle('Tomato Ailments');
+    // this.headerService.setPageTitle('Tomato Ailments');
   }
 
   constructor(private router: Router,
@@ -33,7 +33,7 @@ export class WikiPage {
   }
 
   async handleCardClick(diseaseName: string) {
-    await this.router.navigate(['disease-info', diseaseName]);
+    await this.router.navigate(['wiki/disease-info', diseaseName]);
   }
 
   // TODO: remove below function in future, current implementation is for development

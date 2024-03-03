@@ -37,7 +37,8 @@ export class HistoryDayPage implements OnInit {
       this.month = params.get('month')!;
       this.day = params.get('day')!;
 
-      this.headerService.setPageTitle(`Predictions for ${this.day}.${this.month}.${this.year}`);
+      // this.headerService.setUpBackButton('history');
+      // this.headerService.setPageTitle(`Predictions for ${this.day}.${this.month}.${this.year}`);
 
       // Now you can use these parameters as needed
       this.photoService.loadPredictionByDay(this.year, this.month, this.day);
