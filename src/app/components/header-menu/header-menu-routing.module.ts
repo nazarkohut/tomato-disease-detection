@@ -44,7 +44,7 @@ import { HeaderMenuComponent } from "./header-menu.component";
         data: {title: "History for ", showLogo: false}
       },
     ])
-  ], // Lazy loading ionic | subscribe on route change | router.changes.subs
+  ],
   exports: [
     RouterModule
   ]

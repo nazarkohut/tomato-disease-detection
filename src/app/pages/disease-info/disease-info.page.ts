@@ -8,7 +8,7 @@ import {DatabaseService, DatabaseWikiInfo} from "../../services/database/databas
   styleUrls: ['./disease-info.page.scss'],
 })
 export class DiseaseInfoPage implements OnInit {
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private databaseService: DatabaseService) { }
+  constructor(private activatedRoute: ActivatedRoute, private databaseService: DatabaseService) { }
 
   public pageWikiInfo: DatabaseWikiInfo | undefined;
 
@@ -17,5 +17,4 @@ export class DiseaseInfoPage implements OnInit {
     const diseaseName = this.activatedRoute.snapshot.params['disease-name'];
     this.pageWikiInfo = (await this.databaseService.findWikiByDiseaseName(diseaseName))!;
   }
-
 }

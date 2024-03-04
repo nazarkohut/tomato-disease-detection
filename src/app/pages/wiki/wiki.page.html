@@ -1,12 +1,11 @@
 <div class="scroll-container">
-  <ion-card *ngFor="let card of this.wikiRecords"  class="ion-activatable" style="background-image: url('{{card.disease_image_path}}');" (click)="handleCardClick(card.disease_name)">
+  <ion-card *ngFor="let card of this.wikiRecords" class="ion-wiki-card"
+            style="background-image: url('{{card.disease_image_path}}');" (click)="handleCardClick(card.disease_name)">
     <ion-card-header>
-      <ion-card-title><ion-chip>{{card.disease_name}}</ion-chip></ion-card-title>
+      <ion-card-title class="ion-card-title">
+        <ion-chip class="ion-card-title-chip">{{ card.disease_name }}</ion-chip>
+      </ion-card-title>
     </ion-card-header>
-    <ion-ripple-effect></ion-ripple-effect>
+    <ion-ripple-effect class="ion-card-ripple-effect"></ion-ripple-effect>
   </ion-card>
 </div>
-
-
-<!--<ion-button  (click)="this.fetchData()">Show Loading</ion-button>-->
-

@@ -8,7 +8,6 @@ import {DatabaseService} from "../../services/database/database.service";
 import {DatesService} from "../../services/dates/dates.service";
 import {ConvertersService} from "../../services/converters/converters.service";
 import {ActionSheetController} from "@ionic/angular";
-import {HeaderService} from "../../services/header/header.service";
 
 
 @Component({
@@ -16,9 +15,9 @@ import {HeaderService} from "../../services/header/header.service";
   templateUrl: './prediction-result.page.html',
   styleUrls: ['./prediction-result.page.scss'],
 })
-export class PredictionResultPage implements OnInit{
+export class PredictionResultPage implements OnInit {
 
-  ngOnInit(){
+  ngOnInit() {
     this.activatedRoute.data.subscribe((val) => {
       this.presentActionSheet();
     })
@@ -65,8 +64,7 @@ export class PredictionResultPage implements OnInit{
               public YOLOv8Service: Yolov8OnnxService,
               private loaderService: LoaderService,
               private databaseService: DatabaseService,
-              private actionSheetCtrl: ActionSheetController,
-              private headerService: HeaderService) {
+              private actionSheetCtrl: ActionSheetController) {
   }
 
   goToPage(page_url: string, id: string): void {
@@ -90,7 +88,7 @@ export class PredictionResultPage implements OnInit{
     try {
       // Show spinner before making the API call or any time-consuming task
       await this.loaderService.showLoader();
-      console.log(capturedPhoto.base64String);
+      console.log(capturedPhoto.base64String); // TODO: remove logs
       console.log("DataUrl:", capturedPhoto.dataUrl);
       console.log(capturedPhoto.path);
       console.log(capturedPhoto.webPath);
@@ -113,7 +111,7 @@ export class PredictionResultPage implements OnInit{
       const visualizedBase64 = await this.photoService.createVisualizedImage(imageBase64, output, imageWidth, imageHeight);
 
       const predictedDiseasesCounts = this.convertersService.countLabels(output);
-      const fileDiseaseNames = this.convertersService.createCountString(predictedDiseasesCounts) || "NoTomatoLeavesFound"; // TODO: handle better
+      const fileDiseaseNames = this.convertersService.createCountString(predictedDiseasesCounts) || "NoTomatoLeavesFound";
       const titleDiseaseNames = this.convertersService.createCountString(predictedDiseasesCounts, false, " ", " ") || "No Tomato Leaves Found";
       const currentTime = this.datesService.getCurrentTime();
       const humanFormatCurrentTime = this.datesService.formatTime(currentTime, "human_readable");
@@ -132,7 +130,6 @@ export class PredictionResultPage implements OnInit{
 
 
       this.goToPage("particular-prediction-result", insertedRecordId);
-      // this.goToPage("particular-prediction-result", savedPhotoFile.webviewPath, titleDiseaseNames, humanFormatCurrentTime);
     } finally {
       // Hide the spinner regardless of success or failure
       await this.loaderService.hideLoader();

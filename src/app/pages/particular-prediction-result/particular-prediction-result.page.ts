@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {DatabaseService} from "../../services/database/database.service";
 import {DatesService} from "../../services/dates/dates.service";
 
@@ -32,7 +32,6 @@ export class ParticularPredictionResultPage implements OnInit {
   }
 
   constructor(
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private databaseService: DatabaseService,
     private datesService: DatesService

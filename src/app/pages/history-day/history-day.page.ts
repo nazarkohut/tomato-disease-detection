@@ -3,7 +3,6 @@ import {PhotoService} from "../../services/photo/photo.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DatabaseService} from "../../services/database/database.service";
 import {DatesService} from "../../services/dates/dates.service";
-import {HeaderService} from "../../services/header/header.service";
 
 @Component({
   selector: 'app-history-day',
@@ -22,7 +21,6 @@ export class HistoryDayPage implements OnInit {
     public databaseService: DatabaseService,
     public datesService: DatesService,
     public photoService: PhotoService,
-    private headerService: HeaderService
   ) {
   }
 
