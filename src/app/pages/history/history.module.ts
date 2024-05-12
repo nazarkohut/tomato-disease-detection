@@ -14,7 +14,7 @@ import { HistoryPage } from './history.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    HistoryPageRoutingModule
+    HistoryPageRoutingModule,
   ],
   declarations: [HistoryPage]
 })

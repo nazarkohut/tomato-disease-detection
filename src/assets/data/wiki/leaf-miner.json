@@ -1,0 +1,10 @@
+{
+  "disease_name": "Leaf Miner",
+  "aliases": "",
+  "disease_image_path": "assets/images/wiki/leaf-miner.jpg",
+  "description": "Leaf miner is a common pest caused by the larvae of various insects including moths, flies, and beetles. These larvae feed on the internal tissues of leaves, creating distinctive serpentine tunnels or mines. Leaf miner infestations can severely damage the aesthetic appeal of plants and compromise their ability to photosynthesize effectively. While leaf miner attacks can occur on a wide range of plants, they are particularly problematic for crops such as tomatoes, beans, and spinach.",
+  "treatment": "Controlling leaf miner infestations often requires an integrated approach. Prune and destroy heavily infested leaves to remove larvae and disrupt their life cycle. Introducing natural predators such as parasitic wasps can help keep leaf miner populations in check. For severe infestations, consider applying insecticides labeled for leaf miner control, ensuring to follow safety precautions and application instructions meticulously. Organic options like neem oil or insecticidal soap can also be effective against leaf miners while minimizing harm to beneficial insects.",
+  "prevention": "Preventing leaf miner infestations begins with good garden hygiene and cultural practices. Regularly inspect plants for signs of damage and promptly remove any infested leaves to prevent the spread of larvae. Implementing crop rotation strategies can reduce the buildup of leaf miner populations in the soil. Consider using floating row covers to physically exclude adult leaf miner flies from laying eggs on susceptible plants. Providing plants with optimal growing conditions, including adequate irrigation and balanced nutrition, can enhance their resilience against pest attacks.",
+  "type": "Insect",
+  "other_crops": "tomatoes, beans, spinach"
+}

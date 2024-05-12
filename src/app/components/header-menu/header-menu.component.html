@@ -1,8 +1,18 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-icon name="logo-ionic" size="large" color="primary"></ion-icon>
+    <ion-buttons slot="start" *ngIf="showLogo">
+      <ion-icon src="assets/svg-icons/logo.svg" size="large" class="header-ion-icon"></ion-icon>
     </ion-buttons>
-    <ion-title>Camera</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ pageTitle }}</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<ion-content>
+  <ion-router-outlet></ion-router-outlet>
+<!--  <app-tab-menu></app-tab-menu>-->
+</ion-content>
+

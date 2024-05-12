@@ -2,23 +2,27 @@ import {Injectable} from '@angular/core';
 import {Camera, CameraResultType, CameraSource, Photo} from '@capacitor/camera';
 
 import {Directory, Filesystem} from '@capacitor/filesystem';
-import {Preferences} from '@capacitor/preferences';
 import {Capacitor} from "@capacitor/core";
+import {StorageService} from "../storage/storage.service";
+import {ConvertersService} from "../converters/converters.service";
+import {DatabasePrediction, DatabaseService} from "../database/database.service";
+import {DatesService} from "../dates/dates.service";
 
-export interface UserPhoto {
-  filepath: string;
-  webviewPath?: string;
-}
+export type BoundingBoxes = [number, number, number, number, string, number][];
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
+  public days: any = [];
+  public photosByDay: DatabasePrediction[] = []; // TODO: perhaps change this logic
 
-  public photos: UserPhoto[] = [];
-  private PHOTO_STORAGE: string = 'photos';
+  private PHOTO_STORAGE: string = 'predicted-diseases-photos'; // TODO: consider using cache in the future
 
-  constructor() {
+  constructor(private storageService: StorageService,
+              private databaseService: DatabaseService,
+              public convertersService: ConvertersService,
+              private datesService: DatesService) {
   }
 
   private async readAsBase64(photo: Photo) {
@@ -28,9 +32,14 @@ export class PhotoService {
     return file.data;
   }
 
-  private async savePicture(photo: Photo, fileName: string) {
+  private async savePicture(photo: Photo | string, fileName: string, predictionTime: string, predictionTimeReadable: string) {
     // Convert photo to base64 format, required by Filesystem API to save
-    const base64Data = await this.readAsBase64(photo);
+    let base64Data;
+    if (typeof photo !== 'string'){
+      base64Data = await this.readAsBase64(photo);
+    } else {
+      base64Data = photo
+    }
 
     // Write the file to the data directory
     const savedFile = await Filesystem.writeFile({
@@ -45,61 +54,134 @@ export class PhotoService {
     return {
       filepath: savedFile.uri,
       webviewPath: Capacitor.convertFileSrc(savedFile.uri),
+      fileName: fileName,
+      predictionTime: predictionTime,
+      predictionTimeReadable: predictionTimeReadable,
     };
   }
 
-  // getCurrentDateTime(): string  { // TODO: move
-  //   const timestamp = Date.now();
-  //   const options: Intl.DateTimeFormatOptions = {
-  //     year: 'numeric',
-  //     month: 'long',
-  //     day: 'numeric',
-  //     hour: 'numeric',
-  //     minute: 'numeric',
-  //     second: 'numeric',
-  //     hour12: false, // Use 24-hour format
-  //   };
-  //   return new Date(timestamp).toLocaleString('en-US', options);
-  // }
-
-  generateFileName(diseaseName: string = 'LateBlight'): string { // TODO: remove default parameter
-    const date = new Date();
-
-    // Format the date components separately
-    const year = date.getFullYear(); // TODO: consider moving all of this somewhere
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-
-    // Combine components to form the file name
-    return `${diseaseName}_${year}${month}${day}_${hours}${minutes}${seconds}.jpeg`;
-  }
-
-  public async addNewToGallery() {
-    // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
+  public async getPhotoFromCamera(quality: number, width: number, height: number) {
+    return await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
-      quality: 100
+      quality: quality,
+      width: width,
+      height: height
     });
-
-    const savedImageFile = await this.savePicture(capturedPhoto, "Late_Blight_" + this.generateFileName() + ".jpeg");
-
-    this.photos.unshift(savedImageFile);
-
-    await Preferences.set({
-      key: this.PHOTO_STORAGE,
-      value: JSON.stringify(this.photos),
-    });
-    return capturedPhoto;
   }
 
-  public async loadSaved() {
-    // Retrieve cached photo array data
-    const { value } = await Preferences.get({ key: this.PHOTO_STORAGE });
-    this.photos = (value ? JSON.parse(value) : []) as UserPhoto[];
+  public async getPhotoFromFileSystem(quality: number, width: number, height: number) {
+    return await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos,
+      quality: quality,
+      width: width,
+      height: height
+    });
+  }
+
+  public async savePhoto(inferencePhoto: string | Photo, diseaseNames: string, predictionTime: string, predictionTimeReadable: string){
+    const savedImageFile = await this.savePicture(inferencePhoto, `${this.convertersService.generateFileName(diseaseNames, predictionTime)}.jpeg`, predictionTime, predictionTimeReadable);
+
+    // this.photos.unshift(savedImageFile);
+
+    // this.storage.set(this.PHOTO_STORAGE, JSON.stringify(this.photos)); // TODO: do we need this one?
+    return savedImageFile;
+  }
+
+  // public async loadSaved() {
+  //   this.photos = this.database.getPredictions();
+  //   // console.log("PHOTOS from loadSaved in PHOTOSERVICE: ", this.photos)
+  //   // const value = await this.storage.get(this.PHOTO_STORAGE);
+  //   // this.photos = value ? JSON.parse(value) : [];
+  //   // console.dir("this.photos: ", this.photos);
+  // }
+
+  public async loadSavedPredictionsDays() {
+    await this.databaseService.loadPredictionsDays();
+
+    const uniqueDaysSet: Set<string> = new Set(); // Create a Set to store unique days as strings
+
+    this.databaseService.getPredictionsDays().forEach((val: any) => {
+      const datetimeTuple = this.datesService.timestampToDate(val.predictionTime);
+      const dateTuple = datetimeTuple.slice(0, 3);
+      console.log("Date Tuple: ", dateTuple)
+      const dateString = JSON.stringify(dateTuple); // Serialize tuple into a string
+      uniqueDaysSet.add(dateString);
+    });
+
+    // Convert the Set back to an array of tuples
+    this.days = Array.from(uniqueDaysSet).map((dateString: string) => JSON.parse(dateString));
+
+    console.log("These days: ", this.days);
+
+  }
+
+  async loadPredictionByDay(year: string, month: string, day: string){
+    await this.databaseService.loadPredictionsByDay(year, month, day);
+
+    this.photosByDay = this.databaseService.getPredictionsByDays();
+    console.log("These photos by day: ", this.photosByDay)
+  }
+
+
+  async createVisualizedImage(base64Image: string, boundingBoxes: BoundingBoxes, imageWidth: number, imageHeight: number): Promise<string> {
+    console.log("Init canvas...");
+    const canvas = document.createElement('canvas');
+    canvas.width = imageWidth;
+    canvas.height = imageHeight;
+    console.log("Init context...");
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Could not get canvas context');
+    }
+
+    console.log("Before promise");
+    // Draw the base image
+    const image = new Image();
+    let rectangleColor = "#9B380F";
+    image.src = base64Image;
+    await new Promise<void>(resolve => {
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, imageWidth, imageHeight);
+        // ctx.fillStyle = '#ce0000';
+
+        // Draw bounding boxes and labels
+        ctx.lineWidth = 2;
+        ctx.font = '16px Arial';
+        for (const box of boundingBoxes) {
+          const [x1, y1, x2, y2, diseaseName, confidenceLevel] = box;
+
+          if (diseaseName.toString() === "Healthy"){
+            rectangleColor = "#7DA527";
+          } else{
+            rectangleColor = "#9B380F";
+          }
+
+          ctx.beginPath();
+          ctx.rect(x1, y1, x2 - x1, y2 - y1);
+          ctx.strokeStyle = rectangleColor;
+          ctx.stroke();
+
+          // Draw red background
+          ctx.fillStyle = rectangleColor;
+          ctx.fillRect(x1, y1 - 20, ctx.measureText(`${diseaseName}: ${confidenceLevel.toFixed(2)}`).width, 20);
+
+          // Draw white text
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(`${diseaseName}: ${confidenceLevel.toFixed(2)}`, x1, y1 - 5);
+        }
+
+        resolve();
+      };
+    });
+    console.log("After promise");
+
+    // Convert canvas to base64 data URL
+    const visualizedBase64 = canvas.toDataURL('image/jpeg');
+    console.log("2 - visualizedBase64: ", visualizedBase64);
+    return visualizedBase64;
   }
 }
+
 

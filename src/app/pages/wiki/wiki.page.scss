@@ -1,0 +1,39 @@
+.scroll-container {
+  display: block;
+  overflow-y: auto; /* Enable vertical scrollbar */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for Internet Explorer and Edge */
+
+  .ion-wiki-card {
+    height: 175px;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .ion-card-title {
+    --color: #000000;
+
+    .ion-card-title-chip {
+      --background: hsla(210, 8%, 20%, 0.278);
+      backdrop-filter: blur(10px);
+      color: azure;
+      font-size: 20px;
+      border-radius: 10px;
+    }
+  }
+
+  //ion-button {
+  //  padding: 15px;
+  //  color: rgb(190, 190, 190)
+  //}
+
+  .ripple-parent {
+    color: rgb(109, 109, 109)
+  }
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 0px; /* Hide scrollbar for Chrome, Safari, and Opera */
+}

@@ -1,0 +1,10 @@
+{
+  "disease_name": "Tomato Mosaic Virus",
+  "aliases": "ToMV",
+  "disease_image_path": "assets/images/wiki/mosaic-virus.jpg",
+  "description": "The Mosaic Virus is a common affliction in tomatoes and various other plants, causing significant reductions in both fruit quantity and quality. Named for the distinctive mosaic-like patterns it creates on infected plants, characterized by light green and yellow markings on leaves and mottling on fruits, this virus poses a considerable threat to crop health. Caution is crucial as the virus enters through cuts in leaves and stems, necessitating careful handling practices to prevent its spread. It''s important to note that the Mosaic Virus can also infect tobacco plants and spread from them, emphasizing the need for smokers to take extra precautions, such as thorough handwashing and wearing gloves, when working with tomatoes.",
+  "treatment": "There are no cures for viral diseases, such as the mosaic virus, once a plant is infected. As a result, every effort should be made to prevent the disease from entering your garden.",
+  "prevention": "Remove infected plants promptly. Maintain weed-free garden. Wash hands and disinfect tools. Plant resistant tomato varieties.",
+  "other_crops": "tomatoes, potatoes, peppers, apples, pears, cherries, other",
+  "type": "Viral"
+}

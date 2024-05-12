@@ -13,8 +13,9 @@ import { WikiPage } from './wiki.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    WikiPageRoutingModule
+    WikiPageRoutingModule,
   ],
   declarations: [WikiPage]
 })
 export class WikiPageModule {}
+
