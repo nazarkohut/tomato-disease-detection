@@ -8,22 +8,16 @@ import {ConvertersService} from "../converters/converters.service";
 import {DatabasePrediction, DatabaseService} from "../database/database.service";
 import {DatesService} from "../dates/dates.service";
 
-export interface UserPhoto {
-  filepath: string;
-  webviewPath?: string;
-}
+export type BoundingBoxes = [number, number, number, number, string, number][];
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
-
-
-  // public photos: Prediction[] = []; // TODO: set type
   public days: any = [];
   public photosByDay: DatabasePrediction[] = []; // TODO: perhaps change this logic
 
-  private PHOTO_STORAGE: string = 'predicted-diseases-photos';
+  private PHOTO_STORAGE: string = 'predicted-diseases-photos'; // TODO: consider using cache in the future
 
   constructor(private storageService: StorageService,
               private databaseService: DatabaseService,
@@ -131,7 +125,7 @@ export class PhotoService {
   }
 
 
-  async createVisualizedImage(base64Image: string, boundingBoxes: number[][], imageWidth: number, imageHeight: number): Promise<string> {
+  async createVisualizedImage(base64Image: string, boundingBoxes: BoundingBoxes, imageWidth: number, imageHeight: number): Promise<string> {
     console.log("Init canvas...");
     const canvas = document.createElement('canvas');
     canvas.width = imageWidth;
@@ -145,6 +139,7 @@ export class PhotoService {
     console.log("Before promise");
     // Draw the base image
     const image = new Image();
+    let rectangleColor = "#9B380F";
     image.src = base64Image;
     await new Promise<void>(resolve => {
       image.onload = () => {
@@ -157,12 +152,19 @@ export class PhotoService {
         for (const box of boundingBoxes) {
           const [x1, y1, x2, y2, diseaseName, confidenceLevel] = box;
 
+          if (diseaseName.toString() === "Healthy"){
+            rectangleColor = "#7DA527";
+          } else{
+            rectangleColor = "#9B380F";
+          }
+
           ctx.beginPath();
           ctx.rect(x1, y1, x2 - x1, y2 - y1);
+          ctx.strokeStyle = rectangleColor;
           ctx.stroke();
 
           // Draw red background
-          ctx.fillStyle = '#ff0000';
+          ctx.fillStyle = rectangleColor;
           ctx.fillRect(x1, y1 - 20, ctx.measureText(`${diseaseName}: ${confidenceLevel.toFixed(2)}`).width, 20);
 
           // Draw white text

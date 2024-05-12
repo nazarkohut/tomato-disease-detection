@@ -109,7 +109,7 @@ export class PredictionResultPage implements OnInit {
       console.log("Going into createVisualizedImage...");
 
       const visualizedBase64 = await this.photoService.createVisualizedImage(imageBase64, output, imageWidth, imageHeight);
-
+      console.log("Visualized base 64: ", visualizedBase64);
       const predictedDiseasesCounts = this.convertersService.countLabels(output);
       const fileDiseaseNames = this.convertersService.createCountString(predictedDiseasesCounts) || "NoTomatoLeavesFound";
       const titleDiseaseNames = this.convertersService.createCountString(predictedDiseasesCounts, false, " ", " ") || "No Tomato Leaves Found";

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as ort from 'onnxruntime-web';
 import {onnxExecutionProvider, onnxWasmURL, YOLOConfig} from "../../utils/constants";
+import {BoundingBoxes} from "../photo/photo.service";
 
 
 @Injectable({
@@ -36,10 +37,10 @@ export class Yolov8OnnxService {
     return outputs["output0"].data;
   }
 
-  process_output(output: any, imageWidth: number, imageHeight: number): number[][] {
+  process_output(output: any, imageWidth: number, imageHeight: number): BoundingBoxes {
     let boxes: any[][] = [];
     for (let index = 0; index < 8400; index++) {
-      const [class_id, prob] = [...Array(this.yoloClasses.length).keys()] // Initially array leght was = 80
+      const [class_id, prob] = [...Array(this.yoloClasses.length).keys()] // Initially array length was = 80
         .map(col => [col, output[8400 * (col + 4) + index]])
         .reduce((accum, item) => item[1] > accum[1] ? item : accum, [0, 0]);
       if (prob < this.confidence) {
@@ -63,7 +64,7 @@ export class Yolov8OnnxService {
       result.push(boxes[0]);
       boxes = boxes.filter(box => this.iou(boxes[0], box) < 0.7);
     }
-    return result;
+    return result as BoundingBoxes;
   }
 
   constructor() {
